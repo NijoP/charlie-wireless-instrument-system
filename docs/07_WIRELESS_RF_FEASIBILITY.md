@@ -84,15 +84,13 @@ For a proprietary low-latency link, we assume:
 ### Available Information (from RFQ and typical specs)
 - **Frequency Band**: 2.4 GHz ISM.
 - **Data Rate**: Up to 2 Mbps (typical for proprietary 2.4 GHz radios).
-- **Latency**: The RFQ does not specify latency for CC8530/CC8531. Typical proprietary 2.4 GHz audio streams (e.g., for wireless headphones) can achieve latencies around 4-6 ms one-way.
+- **Latency**: TI's CC8530 datasheet specifies audio latency down to 10.7 ms (one-way, uncompressed audio). This latency is for the wireless link only and does not include processing, packetization, or other system latencies. The RFQ's end-to-end latency target of <5 ms (ideal) or 10 ms (realistic) includes the entire system, so the wireless link latency alone is a significant portion of the budget.
 - **Notes**: The RFQ mentions CC8530/CC8531 as prototype; production candidate is nRF54L15, suggesting CC8530/CC8531 may not meet production requirements (e.g., power, cost, or latency).
 
 ### Feasibility Assessment
 - **Bandwidth**: 2 Mbps raw data rate is sufficient for estimated gross traffic (~1.5-2 Mbps) even with 96 kHz audio and metadata.
-- **Latency**: If the radio can achieve <2 ms one-way latency (including packetization), it could contribute to meeting the <5 ms end-to-end target.
-- **Uncertainties**: The exact latency of CC8530/CC8531 for audio streaming is not provided in the RFQ. We must consult the datasheet or reference design.
-- **Dependency**: The RFQ suggests the architecture should allow replacement; thus, if CC8530/CC8531 does not meet latency, we can consider alternatives.
-
+- **Latency**: Given the CC8530's wireless link latency of 10.7 ms (one-way), achieving the <5 ms end-to-end target is not possible with this radio alone, as the wireless link latency exceeds the entire system budget. The 10 ms realistic target may be achievable if the wireless link latency is 10.7 ms and the rest of the system adds minimal latency (which is unlikely).
+- **Uncertainties**: The CC8530's wireless link latency is 10.7 ms (one-way) per the datasheet. We must consider how this impacts the end-to-end latency budget and whether the 10 ms realistic target is achievable.
 ### Required Investigation
 - Consult CC8530/CC8531 datasheet for typical latency in streaming mode.
 - Check if the radio supports fixed-latency transmission without ACKs.
