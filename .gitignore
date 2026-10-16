@@ -1,5 +1,8 @@
 # Ignore the original RFQ PDF (confidential)
 docs/source/CharlieRFQ.pdf
+# Ignore intermediate text files from PDF extraction
+docs/source/CharlieRFQ.txt
+docs/source/CharlieRFQ_raw.txt
 
 # Ignore OS-generated files
 .DS_Store
@@ -25,9 +28,3 @@ Thumbs.db
 # Ignore build artifacts (if any)
 /build/
 /dist/
-```
-
-Now let's add the rest of the files.
-</think>
-<tool_call>
-<function=bash>
