@@ -44,29 +44,54 @@ samples_per_packet = round(samples_per_packet_exact);
 audio_payload_bits_per_packet = params.audio_bit_depth.value * params.audio_channels.value * samples_per_packet;
 audio_payload_bytes_per_packet = audio_payload_bits_per_packet / 8;
 
+
+
 % Metadata: size per metadata packet, but sent every N audio packets
+
 metadata_update_interval = params.wireless_metadata_update_interval.value; % packets per metadata packet
+
 metadata_bits_per_packet = params.wireless_metadata_size.value * 8 / metadata_update_interval; % average bits per audio packet
+
 metadata_bytes_per_packet = params.wireless_metadata_size.value / metadata_update_interval; % average bytes per audio packet
 
+
+
 % Application frame (audio payload + metadata)
-application_frame_bits_per_packet = application_frame_bits_per_packet + metadata_bits_per_packet;
-application_frame_bytes_per_packet = application_frame_bytes_per_packet + metadata_bytes_per_packet;
+
+application_frame_bits_per_packet = audio_payload_bits_per_packet + metadata_bits_per_packet;
+
+application_frame_bytes_per_packet = audio_payload_bytes_per_packet + metadata_bytes_per_packet;
+
+
 
 % Overhead: header and CRC (assumed to be present in every wireless packet)
-overhead_header_bits_per_packet = params.wireheader_size.value * 8;
+
+overhead_header_bits_per_packet = params.wireless_header_size.value * 8;
+
 overhead_crc_bits_per_packet = params.wireless_crc_size.value * 8;
+
 total_overhead_bits_per_packet = overhead_header_bits_per_packet + overhead_crc_bits_per_packet;
 
+
+
 % Gross bits per packet: audio payload + metadata + header + CRC
+
 gross_bits_per_packet = application_frame_bits_per_packet + total_overhead_bits_per_packet;
 
+
+
 % Bitrates
+
 audio_only_bitrate = audio_payload_bits_per_packet / params.wireless_packet_interval.value; % should equal pcm_payload_rate
+
 application_bitrate = application_frame_bits_per_packet / params.wireless_packet_interval.value;
+
 gross_bitrate = gross_bits_per_packet / params.wireless_packet_interval.value;
+
 ohb = overhead_header_bits_per_packet / params.wireless_packet_interval.value;
+
 ocrc = overhead_crc_bits_per_packet / params.wireless_packet_interval.value;
+
 tot = total_overhead_bits_per_packet / params.wireless_packet_interval.value;
 
 % Nominal radio rates (from manufacturer data)
